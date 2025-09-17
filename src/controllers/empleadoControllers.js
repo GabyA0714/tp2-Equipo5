@@ -33,7 +33,7 @@ async function obtenerEmpleado(req, res) {
         const { id } = req.params
         const empleados = await leerData("empleados")
 
-        const empleado = empleados.find(e => e.id === +id)
+        const empleado = empleados.find(e => e.id === id)
 
         if (!empleado) {
             return res.status(404).json({ error: 'Empleado no encontrado' })
@@ -50,7 +50,7 @@ async function actualizarEmpleado(req, res) {
         const { id } = req.params
 
         const empleados = await leerData("empleados")
-        const index = empleados.findIndex(e => e.id === +id)
+        const index = empleados.findIndex(e => e.id === id)
 
         if (index === -1) {
             return res.status(404).json({ error: 'Empleado no encontrado' })
@@ -72,7 +72,7 @@ async function eliminarEmpleado(req, res) {
         const { id } = req.params
 
         const empleados = await leerData("empleados")
-        const index = empleados.findIndex(e => e.id === +id)
+        const index = empleados.findIndex(e => e.id === id)
 
         if (index === -1) {
             return res.status(404).json({ error: 'Empleado no encontrado' })
