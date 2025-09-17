@@ -1,12 +1,8 @@
-const { v4: uuidv4 } = require('uuid')
+const Persona = require('./Persona')
 
-class Empleado {
+class Empleado extends Persona {
     constructor(nombre, apellido, dni, email, rol, area) {
-        this.id = uuidv4()
-        this.nombre = nombre
-        this.apellido = apellido
-        this.dni = dni
-        this.email = email
+        super(nombre, apellido, dni, email)
         this.rol = rol
         this.area = area
     }
