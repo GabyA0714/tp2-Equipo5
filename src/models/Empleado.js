@@ -1,23 +1,14 @@
-class Empleado {
-    static contador = 0
-    id
-    nombre
-    apellido
-    dni
-    email
-    rol
-    area
+const { v4: uuidv4 } = require('uuid')
 
+class Empleado {
     constructor(nombre, apellido, dni, email, rol, area) {
-        this.id = Empleado.contador
+        this.id = uuidv4()
         this.nombre = nombre
         this.apellido = apellido
         this.dni = dni
         this.email = email
         this.rol = rol
         this.area = area
-
-        Empleado.contador += 1
     }
 }
 
