@@ -11,6 +11,7 @@ Implementar un sistema de gestión para una clínica médica, resolviendo proble
   - Validación de roles y áreas desde archivos de configuración (`roles.json` y `areas.json`).
 
 ## 🗂️ Estructura del proyecto
+```
 /src
 ├── /controllers → Lógica de negocio
 ├── /models → Clases (POO)
@@ -19,3 +20,4 @@ Implementar un sistema de gestión para una clínica médica, resolviendo proble
 ├── /data → Archivos JSON (base de datos)
 ├── /lib → Funciones comunes, utilidades
 └── index.js → Configuración principal de Express
+```
