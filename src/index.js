@@ -13,4 +13,8 @@ app.use('/api/empleados', empleadoRoutes)
 
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en puerto ${PORT}`)
+
+    const pacienteRoutes = require('./routes/pacienteRoutes');
+app.use('/pacientes', pacienteRoutes);
+
 })
