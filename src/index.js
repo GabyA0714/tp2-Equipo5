@@ -4,9 +4,10 @@ const methodOverride = require('method-override')
 // API
 const apiEmpleadoRoutes = require('./routes/apiEmpleadoRoutes')
 const pacienteRoutes = require('./routes/pacienteRoutes')
-const tareaRoutes = require('./routes/tareaRoutes')
+const apiTareaRoutes = require('./routes/apiTareaRoutes')
 // Vistas
 const empleadoRoutes = require('./routes/empleadoRoutes')
+const tareaRoutes = require('./routes/tareaRoutes')
 
 const PORT = process.env.PORT || 5000
 const app = express()
@@ -23,10 +24,11 @@ app.set('view engine', 'pug')
 // Rutas API
 app.use('/api/empleados', apiEmpleadoRoutes)
 app.use('/api/pacientes', pacienteRoutes)
-app.use('/api/tareas', tareaRoutes)
+app.use('/api/tareas', apiTareaRoutes)
 
 // Rutas Vistas
 app.use('/empleados', empleadoRoutes)
+app.use('/tareas', tareaRoutes)
 
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en puerto ${PORT}`)

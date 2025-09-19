@@ -1,13 +1,14 @@
 const express = require('express')
-const { obtenerTareas, crearTarea, actualizarTarea, eliminarTarea, obtenerTareaPorId } = require('../controllers/tareaControllers')
-const {validarTarea} = require('../middlewares/validarTarea')
+const { validarTarea } = require('../middlewares/validarTarea')
+const tareaControllers = require('../controllers/tareaControllers')
 
 const router = express.Router()
 
-router.get('/', obtenerTareas)
-router.post('/', validarTarea, crearTarea)
-router.put('/:id', validarTarea, actualizarTarea)
-router.delete('/:id', eliminarTarea)
-router.get('/:id', obtenerTareaPorId)
+router.get('/', tareaControllers.listarTareas)
+router.get('/nuevo', tareaControllers.formularioNuevaTarea)
+router.post('/nuevo', validarTarea('nuevo'), tareaControllers.crearTarea)
+router.get('/editar/:id', tareaControllers.formularioEditarTarea)
+router.post('/editar/:id', validarTarea('editar'), tareaControllers.actualizarTarea)
+router.delete('/eliminar/:id', tareaControllers.eliminarTarea)
 
 module.exports = router

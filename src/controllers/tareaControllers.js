@@ -1,5 +1,91 @@
 const Tarea = require('../models/Tarea')
-const { leerData, escribirData } = require('../lib/fs')
+const {
+    leerData,
+    escribirData
+} = require('../lib/fs')
+
+async function formularioNuevaTarea(req, res) {
+    try {
+        const areas = await leerData("areas")
+        const empleados = await leerData("empleados")
+        const pacientes = await leerData("pacientes")
+
+        const estados = ["pendiente", "en progreso", "completada"]
+        const prioridades = ["baja", "media", "alta"]
+        const tiposValidosPorArea = {
+            'Administración de Turnos': [
+                'Alta de turno para paciente',
+                'Reprogramación o cancelación de cita',
+                'Confirmación de asistencia',
+                'Asignación de médico a turno'
+            ],
+            'Stock de Insumos': [
+                'Carga de nuevo insumo al stock',
+                'Control de vencimientos',
+                'Reposición de materiales',
+                'Baja por uso o descarte'
+            ]
+        };
+
+        res.render('nuevaTarea', {
+            areas,
+            empleados,
+            pacientes,
+            estados,
+            prioridades,
+            tiposValidosPorArea
+        })
+    } catch (error) {
+        return res.render('nuevaTarea', {
+            error: error.message
+        })
+    }
+}
+
+async function formularioEditarTarea(req, res) {
+    try {
+        const tareas = await leerData("tareas")
+        const tarea = tareas.find(t => t.id === req.params.id)
+        if (!tarea) {
+            return res.redirect('/tareas')
+        }
+
+        const areas = await leerData("areas")
+        const empleados = await leerData("empleados")
+        const pacientes = await leerData("pacientes")
+        const estados = ["pendiente", "en progreso", "completada"]
+        const prioridades = ["baja", "media", "alta"]
+        const tiposValidosPorArea = {
+            'Administración de Turnos': [
+                'Alta de turno para paciente',
+                'Reprogramación o cancelación de cita',
+                'Confirmación de asistencia',
+                'Asignación de médico a turno'
+            ],
+            'Stock de Insumos': [
+                'Carga de nuevo insumo al stock',
+                'Control de vencimientos',
+                'Reposición de materiales',
+                'Baja por uso o descarte'
+            ]
+        };
+
+        return res.render('tareas/editar', {
+            tarea,
+            areas,
+            empleados,
+            pacientes,
+            estados,
+            prioridades,
+            tiposValidosPorArea
+        })
+    } catch (error) {
+        return res.render('tareas/editar', {
+            error: error.message,
+            tarea: req.body
+        })
+    }
+}
 
 async function crearTarea(req, res) {
     try {
@@ -7,15 +93,21 @@ async function crearTarea(req, res) {
         const tareas = await leerData("tareas")
         tareas.push(nuevaTarea)
         await escribirData("tareas", tareas)
-        return res.status(201).json(nuevaTarea)
+        res.redirect('/tareas')
     } catch (error) {
-        res.status(500).json({ error: error.message })
+        res.render('nuevaTarea', {
+            error: error.message,
+            tarea: req.body
+        })
     }
 }
 
-async function obtenerTareas(req, res) {
+async function listarTareas(req, res) {
     try {
         const tareas = await leerData("tareas")
+        const areas = await leerData("areas")
+        const empleados = await leerData("empleados")
+        const pacientes = await leerData("pacientes")
         const filtros = req.query
         let tareasFiltradas = tareas
         if (Object.keys(filtros).length > 0) {
@@ -30,57 +122,77 @@ async function obtenerTareas(req, res) {
                 return coincide
             })
         }
-        return res.status(200).json(tareasFiltradas)
+        res.render('tareas/listado', {
+            tareas: tareasFiltradas,
+            areas,
+            empleados,
+            pacientes,
+            filtros
+        })
     } catch (error) {
-        return res.status(500).json({ error: error.message })
-    }
-}
-
-async function obtenerTareaPorId(req, res) {
-    try {
-        const { id } = req.params
-        const tareas = await leerData("tareas")
-        const tarea = tareas.find(t => t.id === id)
-        if (!tarea) {
-            return res.status(404).json({ error: "Tarea no encontrada" })
-        }
-        return res.status(200).json(tarea)
-    } catch (error) {
-        return res.status(500).json({ error: error.message })
+        res.render('tareas/listado', {
+            error: error.message
+        })
     }
 }
 
 async function actualizarTarea(req, res) {
     try {
-        const { id } = req.params
-        const tareas = await leerData("tareas")
-        const tareaIndex = tareas.findIndex(t => t.id === id)
-        if (tareaIndex === -1) {
-            return res.status(404).json({ error: "Tarea no encontrada" })
+        const {
+            id
+        } = req.params
+        const tareas = await leerData('tareas')
+        const index = tareas.findIndex(t => t.id === id)
+        if (index === -1) return res.status(404).json({
+            error: 'Tarea no encontrada'
+        })
+
+        tareas[index] = {
+            ...tareas[index],
+            ...req.body
         }
-        const tareaActualizada = { ...tareas[tareaIndex], ...req.body } 
-        tareas[tareaIndex] = tareaActualizada
-        await escribirData("tareas", tareas)
-        return res.status(200).json(tareas[tareaIndex])
+        await escribirData('tareas', tareas)
+        res.redirect('/tareas')
     } catch (error) {
-        return res.status(500).json({ error: error.message })
+        res.render('tareas/editar', {
+            error: error.message,
+            tarea: {
+                ...req.body,
+                id: req.params.id
+            }
+        })
     }
 }
 
 async function eliminarTarea(req, res) {
     try {
-        const { id } = req.params
+        const {
+            id
+        } = req.params
         const tareas = await leerData("tareas")
         const tareaIndex = tareas.findIndex(t => t.id === id)
         if (tareaIndex === -1) {
-            return res.status(404).json({ error: "Tarea no encontrada" })
+            return res.status(404).json({
+                error: "Tarea no encontrada"
+            })
         }
         const tareaEliminada = tareas.splice(tareaIndex, 1)
         await escribirData("tareas", tareas)
-        return res.status(200).json({ message: "Tarea eliminada", tarea: tareaEliminada[0] })
+        res.redirect('/tareas')
     } catch (error) {
-        return res.status(500).json({ error: error.message })
+        const tareas = await leerData("tareas")
+        return res.render('tareas/listado', {
+            error: error.message,
+            tareas
+        })
     }
 }
 
-module.exports = { crearTarea, obtenerTareas, obtenerTareaPorId, actualizarTarea, eliminarTarea }
+module.exports = {
+  formularioNuevaTarea,
+  formularioEditarTarea,
+  listarTareas,
+  crearTarea,
+  actualizarTarea,
+  eliminarTarea
+}
