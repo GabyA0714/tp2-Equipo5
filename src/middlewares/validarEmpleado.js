@@ -1,24 +1,51 @@
 const { leerData } = require('../lib/fs')
 
-async function validarEmpleado(req, res, next) {
-  try {
-    const roles = await leerData("roles")
-    const areas = await leerData("areas")
+function validarEmpleado(vista) {
+	const url = `empleados/${vista}`
 
-    const { rol, area } = req.body
+	return async (req, res, next) => {
+		// Leer data
+		const roles = await leerData('roles')
+		const areas = await leerData('areas')
+		const empleados = await leerData('empleados')
 
-    if (!roles.includes(rol)) {
-      return res.status(400).json({ error: `Rol inválido. Opciones: ${roles.join(', ')}` })
-    }
+		const { nombre, apellido, dni, email, rol, area } = req.body
+		const { id } = req.params
 
-    if (!areas.includes(area)) {
-      return res.status(400).json({ error: `Área inválida. Opciones: ${areas.join(', ')}` })
-    }
+		// Generar empleado con/sin id
+		let empleado = {}
+		if (id) {
+			empleado = { id, nombre, apellido, dni, email, rol, area }
+		} else {
+			empleado = { nombre, apellido, dni, email, rol, area }
+		}
 
-    next()
-  } catch (err) {
-    res.status(500).json({ error: 'Error validando roles/áreas' })
-  }
+		// Validar DNI
+		if (empleados.some((e) => e.dni === empleado.dni && e.id !== empleado.id)) {
+			return res.render(url, {
+				error: 'DNI registrado previamente',
+				empleado,
+			})
+		}
+
+		// Validar rol
+		if (!roles.includes(rol)) {
+			return res.render(url, {
+				error: `Rol inválido. Debe ser uno de: ${roles.join(', ')}`,
+				empleado,
+			})
+		}
+
+		// Validar área
+		if (!areas.includes(area)) {
+			return res.render(url, {
+				error: `Área inválida. Debe ser una de: ${areas.join(', ')}`,
+				empleado,
+			})
+		}
+
+		next()
+	}
 }
 
 module.exports = { validarEmpleado }
