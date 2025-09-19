@@ -1,1 +1,57 @@
-[]
+[
+  {
+    "id": "1",
+    "nombre": "Laura",
+    "apellido": "Gómez",
+    "dni": "10203040",
+    "email": "laura.gomez@mail.com",
+    "telefono": "1145678901",
+    "obraSocial": "OSDE",
+    "nroAfiliado": "1234567890",
+    "fechaNacimiento": "1985-07-21"
+  },
+  {
+    "id": "2",
+    "nombre": "Carlos",
+    "apellido": "Rodríguez",
+    "dni": "20304050",
+    "email": "carlos.rodriguez@mail.com",
+    "telefono": "1187654321",
+    "obraSocial": "Swiss Medical",
+    "nroAfiliado": "2345678901",
+    "fechaNacimiento": "1992-03-14"
+  },
+  {
+    "id": "3",
+    "nombre": "Sofía",
+    "apellido": "Pérez",
+    "dni": "30405060",
+    "email": "sofia.perez@mail.com",
+    "telefono": "1123456789",
+    "obraSocial": "Galeno",
+    "nroAfiliado": "3456789012",
+    "fechaNacimiento": "1978-11-30"
+  },
+  {
+    "id": "4",
+    "nombre": "Marcelo",
+    "apellido": "Acosta",
+    "dni": "40506070",
+    "email": "marcelo.acosta@mail.com",
+    "telefono": "1156789012",
+    "obraSocial": null,
+    "nroAfiliado": null,
+    "fechaNacimiento": "1995-09-05"
+  },
+  {
+    "id": "5",
+    "nombre": "Valeria",
+    "apellido": "Sánchez",
+    "dni": "50607080",
+    "email": "valeria.sanchez@mail.com",
+    "telefono": "1190123456",
+    "obraSocial": "Medifé",
+    "nroAfiliado": "4567890123",
+    "fechaNacimiento": "1988-02-18"
+  }
+]

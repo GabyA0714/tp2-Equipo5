@@ -4,6 +4,7 @@ const methodOverride = require('method-override')
 // API
 const apiEmpleadoRoutes = require('./routes/apiEmpleadoRoutes')
 const pacienteRoutes = require('./routes/pacienteRoutes')
+const tareaRoutes = require('./routes/tareaRoutes')
 // Vistas
 const empleadoRoutes = require('./routes/empleadoRoutes')
 
@@ -22,6 +23,7 @@ app.set('view engine', 'pug')
 // Rutas API
 app.use('/api/empleados', apiEmpleadoRoutes)
 app.use('/api/pacientes', pacienteRoutes)
+app.use('/api/tareas', tareaRoutes)
 
 // Rutas Vistas
 app.use('/empleados', empleadoRoutes)
