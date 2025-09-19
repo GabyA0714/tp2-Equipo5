@@ -1,105 +1,111 @@
 const Empleado = require('../models/Empleado')
 const { leerData, escribirData } = require('../lib/fs')
 
-async function crearEmpleado(req, res) {
+function formularioNuevoEmpleado(req, res) {
     try {
-        const { nombre, apellido, dni, email, rol, area } = req.body
+        res.render('empleados/nuevo')
+    } catch (error) {
+        return res.render('empleados/nuevo', { error: error.message })
+    }
+}
 
+async function formularioEditarEmpleado(req, res) {
+    try {
         // Data
-        const empleado = new Empleado(nombre, apellido, dni, email, rol, area)
-        const empleados = await leerData("empleados")
+        const empleados = await leerData('empleados')
+        const empleado = empleados.find((e) => e.id === req.params.id)
 
-        // Combrobar DNI
-        if (empleados.some(e => e.dni === empleado.dni)) {
-            return res.status(400).json({
-                error: "DNI registrado previamente"
-            })
+        if (!empleado) {
+            return res.redirect('/empleados')
         }
 
-        // Guardar
-        empleados.push(empleado)
-        await escribirData("empleados", empleados)
-
-        return res.status(201).json(empleado)
+        res.render('empleados/editar', { empleado })
     } catch (error) {
-        res.status(500).json({ error: error.message })
+        return res.render('empleados/editar', { error: error.message, empleado: req.body })
     }
+}
+
+async function crearEmpleado(req, res) {
+	try {
+		const { nombre, apellido, dni, email, rol, area } = req.body
+
+		// Data
+		const empleado = new Empleado(nombre, apellido, dni, email, rol, area)
+		const empleados = await leerData('empleados')
+
+		// Guardar
+		empleados.push(empleado)
+		await escribirData('empleados', empleados)
+
+		res.redirect('/empleados')
+	} catch (error) {
+        return res.render('empleados/nuevo', { error: error.message, empleado: req.body })
+	}
 }
 
 async function listarEmpleados(req, res) {
-    try {
-        const empleados = await leerData("empleados")
-        res.status(200).json(empleados)
-    } catch (error) {
-        res.status(500).json({ error: error.message })
-    }
-}
-
-async function obtenerEmpleado(req, res) {
-    try {
-        const { id } = req.params
-
+	try {
         // Data
-        const empleados = await leerData("empleados")
-        const empleado = empleados.find(e => e.id === id)
+		const empleados = await leerData('empleados')
 
-        // Combrobar empleado
-        if (!empleado) {
-            return res.status(404).json({ error: 'Empleado no encontrado' })
-        }
-
-        return res.json(empleado)
-    } catch (error) {
-        return res.status(500).json({ error: error.message })
-    }
+		res.render('empleados/listado', { empleados })
+	} catch (error) {
+		return res.render('empleados/listado', { error: error.message })
+	}
 }
 
 async function actualizarEmpleado(req, res) {
-    try {
+	try {
         const { id } = req.params
 
-        // Data
-        const empleados = await leerData("empleados")
-        const index = empleados.findIndex(e => e.id === id)
+		// Data
+		const empleados = await leerData('empleados')
+		const index = empleados.findIndex((e) => e.id === id)
 
-        // Comprobar empleado
-        if (index === -1) {
-            return res.status(404).json({ error: 'Empleado no encontrado' })
-        }
+		// Comprobar empleado
+		if (index === -1) {
+			return res.status(404).json({ error: 'Empleado no encontrado' })
+		}
 
-        const { nombre, apellido, dni, email, rol, area } = req.body
+		// Guardar
+		empleados[index] = {...empleados[index], ...req.body}
+		await escribirData('empleados', empleados)
 
-        // Guardar
-        empleados[index] = { ...empleados[index], nombre, apellido, dni, email, rol, area }
-        await escribirData("empleados", empleados)
-
-        res.status(200).json(empleados[index])
-    } catch (error) {
-        res.status(500).json({ error: error.message })
-    }
+		res.redirect('/empleados')
+	} catch (error) {
+		return res.render('empleados/editar', { error: error.message, empleado: {...req.body, id: req.params.id } })
+	}
 }
 
 async function eliminarEmpleado(req, res) {
-    try {
-        const { id } = req.params
+	try {
+		const { id } = req.params
 
-        // Data
-        const empleados = await leerData("empleados")
-        const index = empleados.findIndex(e => e.id === id)
+		// Data
+		const empleados = await leerData('empleados')
+		const index = empleados.findIndex((e) => e.id === id)
 
-        // Comprobar empleado
-        if (index === -1) {
-            return res.status(404).json({ error: 'Empleado no encontrado' })
-        }
+		// Comprobar empleado
+		if (index === -1) {
+			return res.status(404).json({ error: 'Empleado no encontrado' })
+		}
 
-        // Guardar
-        const eliminado = empleados.splice(index, 1)
-        await escribirData("empleados", empleados)
+		// Guardar
+		empleados.splice(index, 1)
+		await escribirData('empleados', empleados)
 
-        res.status(200).json(eliminado)
-    } catch (error) {
-        res.status(500).json({ error: error.message })
-    }
+		res.redirect('/empleados')
+	} catch (error) {
+        const empleados = await leerData('empleados')
+		return res.render('empleados/listado', { error: error.message, empleados })
+	}
 }
 
-module.exports = { listarEmpleados, crearEmpleado, obtenerEmpleado, actualizarEmpleado, eliminarEmpleado }
+module.exports = {
+	formularioNuevoEmpleado,
+	formularioEditarEmpleado,
+	listarEmpleados,
+	crearEmpleado,
+	actualizarEmpleado,
+	eliminarEmpleado,
+}
