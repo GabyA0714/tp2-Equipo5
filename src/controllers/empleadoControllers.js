@@ -2,26 +2,31 @@ const Empleado = require('../models/Empleado')
 const { leerData, escribirData } = require('../lib/fs')
 
 function formularioNuevoEmpleado(req, res) {
+	const titulo = "Nuevo empleado"
+
     try {
-        res.render('empleados/nuevo')
+        res.render('empleados/nuevo', { titulo })
     } catch (error) {
-        return res.render('empleados/nuevo', { error: error.message })
+        return res.render('empleados/nuevo', { titulo, error: error.message })
     }
 }
 
 async function formularioEditarEmpleado(req, res) {
+	const titulo = "Editar empleado"
+
     try {
         // Data
         const empleados = await leerData('empleados')
         const empleado = empleados.find((e) => e.id === req.params.id)
 
+		// Comprobar empleado
         if (!empleado) {
-            return res.redirect('/empleados')
+            return res.render('empleados/editar', { titulo, error: "ID empleado incorrecto" })
         }
 
-        res.render('empleados/editar', { empleado })
+        res.render('empleados/editar', { titulo, empleado })
     } catch (error) {
-        return res.render('empleados/editar', { error: error.message, empleado: req.body })
+        return res.render('empleados/editar', { titulo, error: error.message, empleado: req.body })
     }
 }
 
@@ -39,22 +44,27 @@ async function crearEmpleado(req, res) {
 
 		res.redirect('/empleados')
 	} catch (error) {
-        return res.render('empleados/nuevo', { error: error.message, empleado: req.body })
+		const titulo = "Nuevo empleado"
+        return res.render('empleados/nuevo', { titulo, error: error.message, empleado: req.body })
 	}
 }
 
 async function listarEmpleados(req, res) {
+	const titulo = "Empleados"
+
 	try {
         // Data
 		const empleados = await leerData('empleados')
 
-		res.render('empleados/listado', { empleados })
+		res.render('empleados/listado', { titulo, empleados })
 	} catch (error) {
-		return res.render('empleados/listado', { error: error.message })
+		return res.render('empleados/listado', { titulo, error: error.message })
 	}
 }
 
 async function actualizarEmpleado(req, res) {
+	const titulo = "Editar empleado"
+
 	try {
         const { id } = req.params
 
@@ -64,7 +74,7 @@ async function actualizarEmpleado(req, res) {
 
 		// Comprobar empleado
 		if (index === -1) {
-			return res.status(404).json({ error: 'Empleado no encontrado' })
+			return res.render('empleados/editar', { titulo, error: "ID empleado inexistente" })
 		}
 
 		// Guardar
@@ -73,11 +83,14 @@ async function actualizarEmpleado(req, res) {
 
 		res.redirect('/empleados')
 	} catch (error) {
-		return res.render('empleados/editar', { error: error.message, empleado: {...req.body, id: req.params.id } })
+		const empleado = {...req.body, id: req.params.id }
+		return res.render('empleados/editar', { titulo, error: error.message, empleado })
 	}
 }
 
 async function eliminarEmpleado(req, res) {
+	const titulo = "Empleados"
+
 	try {
 		const { id } = req.params
 
@@ -87,7 +100,7 @@ async function eliminarEmpleado(req, res) {
 
 		// Comprobar empleado
 		if (index === -1) {
-			return res.status(404).json({ error: 'Empleado no encontrado' })
+			return res.render('empleados/listado', { titulo, error: "ID empleado inexistente", empleados })
 		}
 
 		// Guardar
@@ -97,7 +110,7 @@ async function eliminarEmpleado(req, res) {
 		res.redirect('/empleados')
 	} catch (error) {
         const empleados = await leerData('empleados')
-		return res.render('empleados/listado', { error: error.message, empleados })
+		return res.render('empleados/listado', { titulo, error: error.message, empleados })
 	}
 }
 
