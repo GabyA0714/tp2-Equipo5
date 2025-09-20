@@ -19,7 +19,7 @@ const insumoRoutes = require('./routes/insumoRoutes')
 
 
 const PORT = process.env.PORT || 5000
-const app = express()   // 
+const app = express()
 
 // Middlewares
 app.use(express.json())
@@ -39,6 +39,7 @@ app.use('/api/insumos', apiInsumoRoutes)
 
 
 // Rutas Vistas
+app.get('/', (req, res) => res.render('portada')) 
 app.use('/empleados', empleadoRoutes)
 app.use('/tareas', tareaRoutes)
 app.use('/pacientes', pacienteRoutes)
