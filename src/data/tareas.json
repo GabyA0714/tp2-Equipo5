@@ -1,33 +1,28 @@
 [
     {
-        "id": "8d97b28e-47aa-4537-b4a7-caf714d1c11f",
-        "area": "Administración de Turnos",
-        "tipo": "Alta de turno para paciente",
-        "estado": "pendiente",
-        "prioridad": "alta",
-        "fechaInicio": "19/9/2025, 02:52:59",
-        "observaciones": "Turno para Dr. Juan Pérez (Atención Médica)."
-    },
-    {
-        "id": "8b650460-d2e1-452d-8f54-bccf7714ad8b",
+        "id": "e0828848-54b4-40fd-aac5-6cf30186c639",
         "area": "Stock de Insumos",
-        "tipo": "Reposición de materiales",
-        "estado": "en progreso",
-        "prioridad": "alta",
-        "fechaInicio": "19/9/2025, 02:56:48",
-        "empleadoId": "3",
-        "observaciones": "Solicitar 50 cajas de guantes al proveedor de insumos."
+        "tipo": "Control de vencimientos",
+        "estado": "pendiente",
+        "prioridad": "media",
+        "fechaInicio": "2025-09-22T06:56",
+        "fechaFin": "",
+        "empleadoId": "",
+        "pacienteId": "",
+        "proveedor": null,
+        "observaciones": ""
     },
     {
-        "id": "bf167a7a-bc43-4527-8c45-c57c2239fa12",
-        "area": "Administración de Turnos",
-        "tipo": "Confirmación de asistencia",
-        "estado": "completada",
+        "id": "b273baa2-b87b-4b95-8693-33df9990ab00",
+        "area": "Facturación",
+        "tipo": "",
+        "estado": "pendiente",
         "prioridad": "media",
-        "fechaInicio": "19/9/2025, 02:57:42",
-        "fechaFin": "19/9/2025, 02:57:42",
-        "empleadoId": "2",
-        "pacienteId": "5",
-        "observaciones": "Paciente Valeria Sánchez confirmó su cita de mañana."
+        "fechaInicio": "2025-09-20T13:30",
+        "fechaFin": "",
+        "empleadoId": "",
+        "pacienteId": "",
+        "proveedor": null,
+        "observaciones": ""
     }
 ]
