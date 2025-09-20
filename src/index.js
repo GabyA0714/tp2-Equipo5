@@ -10,11 +10,10 @@ const apiTareaRoutes = require('./routes/apiTareaRoutes')
 // Vistas
 const empleadoRoutes = require('./routes/empleadoRoutes')
 const tareaRoutes = require('./routes/tareaRoutes')
-// Si después crean vistas para pacientes:
-// const pacienteRoutes = require('./routes/pacienteRoutes')
+const pacienteRoutes = require('./routes/pacienteRoutes') 
 
 const PORT = process.env.PORT || 5000
-const app = express()
+const app = express()   // 
 
 // Middlewares
 app.use(express.json())
@@ -33,8 +32,9 @@ app.use('/api/tareas', apiTareaRoutes)
 // Rutas Vistas
 app.use('/empleados', empleadoRoutes)
 app.use('/tareas', tareaRoutes)
-// app.use('/pacientes', pacienteRoutes) 
+app.use('/pacientes', pacienteRoutes) 
 
+// Servidor
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en puerto ${PORT}`)
 })
