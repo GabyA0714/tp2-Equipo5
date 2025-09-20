@@ -43,5 +43,14 @@
         "email": "carlos.sanchez@clinica.com",
         "rol": "médico",
         "area": "Atención Médica"
+    },
+    {
+        "id": "01af5e28-35ea-4a99-8057-fca2457d88c8",
+        "nombre": "Sofia",
+        "apellido": "Garcia",
+        "dni": "25423433",
+        "email": "sofia@garcia",
+        "rol": "médico",
+        "area": "Atención Médica"
     }
 ]

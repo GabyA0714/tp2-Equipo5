@@ -2,10 +2,10 @@
     {
         "id": "e0828848-54b4-40fd-aac5-6cf30186c639",
         "area": "Stock de Insumos",
-        "tipo": "Control de vencimientos",
+        "tipo": "Carga de nuevo insumo al stock",
         "estado": "pendiente",
         "prioridad": "media",
-        "fechaInicio": "2025-09-22T06:56",
+        "fechaInicio": "2025-09-22T09:56",
         "fechaFin": "",
         "empleadoId": "",
         "pacienteId": "",
