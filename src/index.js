@@ -13,7 +13,7 @@ const tareaRoutes = require('./routes/tareaRoutes')
 const pacienteRoutes = require('./routes/pacienteRoutes') 
 
 const PORT = process.env.PORT || 5000
-const app = express()   // 
+const app = express()
 
 // Middlewares
 app.use(express.json())
@@ -30,6 +30,7 @@ app.use('/api/pacientes', apiPacienteRoutes)
 app.use('/api/tareas', apiTareaRoutes)
 
 // Rutas Vistas
+app.get('/', (req, res) => res.render('portada')) 
 app.use('/empleados', empleadoRoutes)
 app.use('/tareas', tareaRoutes)
 app.use('/pacientes', pacienteRoutes) 
