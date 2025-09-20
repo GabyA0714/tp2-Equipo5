@@ -1,0 +1,5 @@
+{
+  "categorias": ["medicamento", "descartable", "instrumental"],
+  "unidades": ["unidad", "caja", "frasco"],
+  "estados": ["vigente", "vencido", "agotado"]
+}

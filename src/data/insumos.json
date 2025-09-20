@@ -1,1 +1,29 @@
-[]
+[
+    {
+        "id": "1758381772311",
+        "nombre": "Alcohol en gel",
+        "categoria": "descartable",
+        "stock": "50",
+        "unidad": "frasco",
+        "fechaVencimiento": "2026-04-02",
+        "estado": "vigente"
+    },
+    {
+        "id": "1758391652894",
+        "nombre": "gasa",
+        "categoria": "descartable",
+        "stock": "10",
+        "unidad": "caja",
+        "fechaVencimiento": "2025-10-09",
+        "estado": "agotado"
+    },
+    {
+        "id": "1758394760502",
+        "nombre": "aguja",
+        "categoria": "descartable",
+        "stock": "10",
+        "unidad": "frasco",
+        "fechaVencimiento": "2025-10-09",
+        "estado": "vigente"
+    }
+]
