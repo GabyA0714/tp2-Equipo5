@@ -32,11 +32,6 @@ async function validarApiTarea(req, res, next) {
             });
         }
 
-        if (!tiposValidosPorArea[area].includes(tipo)) {
-            return res.status(400).json({
-                error: `Tipo inválido para el área ${area}. Opciones: ${tiposValidosPorArea[area] ? tiposValidosPorArea[area].join(", ") : "Ninguna"}`
-            });
-        }
 
         if (!estadosValidos.includes(estado)) {
             return res.status(400).json({
@@ -72,11 +67,13 @@ async function validarApiTarea(req, res, next) {
                 });
             }
 
+            /*
             if (empleadoExiste.area !== area) {
                 return res.status(400).json({
                     error: "El área del empleado no coincide con el área de la tarea"
                 });
             }
+            */
         }
 
         next();

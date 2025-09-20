@@ -11,19 +11,6 @@ function validarTarea(vista) {
             const areas = await leerData('areas')
             const empleados = await leerData('empleados')
             const pacientes = await leerData('pacientes')
-            const {
-                area,
-                tipo,
-                estado,
-                prioridad,
-                fechaFin,
-                empleadoId,
-                pacienteId,
-                proveedor,
-                observaciones
-            } = req.body
-            const { id } = req.params
-
             const estadosValidos = ["pendiente", "en progreso", "completada"]
             const prioridadesValidas = ["baja", "media", "alta"]
             const tiposValidosPorArea = {
@@ -41,6 +28,21 @@ function validarTarea(vista) {
                 ]
             }
 
+            const {
+                area,
+                tipo,
+                estado,
+                prioridad,
+                fechaFin,
+                empleadoId,
+                pacienteId,
+                proveedor,
+                observaciones
+            } = req.body
+            const { id } = req.params
+
+
+
             // reconstruir el objeto tarea para mantener los datos en el formulario
             let tarea = {
                 id,
@@ -55,41 +57,26 @@ function validarTarea(vista) {
                 observaciones
             }
 
+            const renderError = (msg) => res.render(url, {
+                error: msg,
+                tarea,
+                areas,
+                empleados,
+                pacientes,
+                estados: estadosValidos,
+                prioridades: prioridadesValidas,
+                tiposValidosPorArea
+            })
+
             // Validar área
             if (!areas.includes(area)) {
-                return res.render(url, {
-                    error: `Área inválida. Opciones: ${areas.join(", ")}`,
-                    tarea,
-                    areas,
-                    empleados,
-                    pacientes
-                })
+                return renderError(`Área inválida. Opciones: ${areas.join(", ")}`)
             }
 
-            // Validar tipo por área
-            if (!tiposValidosPorArea[area] || !tiposValidosPorArea[area].includes(tipo)) {
-                return res.render(url, {
-                    error: `Tipo inválido para el área ${area}. Opciones: ${
-                        tiposValidosPorArea[area]
-                            ? tiposValidosPorArea[area].join(", ")
-                            : "Ninguna"
-                    }`,
-                    tarea,
-                    areas,
-                    empleados,
-                    pacientes
-                })
-            }
 
             // Validar estado
             if (!estadosValidos.includes(estado)) {
-                return res.render(url, {
-                    error: `Estado inválido. Debe ser uno de: ${estadosValidos.join(", ")}`,
-                    tarea,
-                    areas,
-                    empleados,
-                    pacientes
-                })
+                return renderError(`Estado inválido. Debe ser uno de: ${estadosValidos.join(", ")}`)
             }
 
             // Si está completada y no hay fechaFin, la genera
@@ -101,13 +88,7 @@ function validarTarea(vista) {
 
             // Validar prioridad
             if (!prioridadesValidas.includes(prioridad)) {
-                return res.render(url, {
-                    error: `Prioridad inválida. Debe ser una de: ${prioridadesValidas.join(", ")}`,
-                    tarea,
-                    areas,
-                    empleados,
-                    pacientes
-                })
+                return renderError(`Prioridad inválida. Debe ser una de: ${prioridadesValidas.join(", ")}`)
             }
 
             // Validar paciente
@@ -137,6 +118,7 @@ function validarTarea(vista) {
                     })
                 }
 
+                /*
                 if (empleadoExiste.area !== area) {
                     return res.render(url, {
                         error: "El área del empleado no coincide con el área de la tarea",
@@ -146,6 +128,7 @@ function validarTarea(vista) {
                         pacientes
                     })
                 }
+                */
             }
 
             // Si todo pasa, continúa
@@ -153,10 +136,28 @@ function validarTarea(vista) {
         } catch (error) {
             res.render(url, {
                 error: "Error interno del servidor",
-                tarea: req.body
+                tarea: req.body,
+                areas: await leerData('areas'),
+                empleados: await leerData('empleados'),
+                pacientes: await leerData('pacientes'),
+                estados: ["pendiente", "en progreso", "completada"],
+                prioridades: ["baja", "media", "alta"],
+                tiposValidosPorArea: {
+                    "Administración de Turnos": [
+                        'Alta de turno para paciente',
+                        'Reprogramación o cancelación de cita',
+                        'Confirmación de asistencia',
+                        'Asignación de médico a turno'
+                    ],
+                    "Stock de Insumos": [
+                        'Carga de nuevo insumo al stock',
+                        'Control de vencimientos',
+                        'Reposición de materiales',
+                        'Baja por uso o descarte'
+                    ]
+                }
             })
         }
     }
 }
-
 module.exports = { validarTarea }
