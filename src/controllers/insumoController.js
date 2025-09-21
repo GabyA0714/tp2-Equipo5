@@ -11,12 +11,14 @@ function calcularEstado(insumo) {
 	return "vigente"
 }
 
-function formularioNuevoInsumo(req, res) {
+async function formularioNuevoInsumo(req, res) {
 	const titulo = "Nuevo insumo"
 	try {
-		res.render('insumos/nuevo', { titulo, insumo: {} })
+		const { categorias, unidades } = await leerData("config");
+
+		res.render('insumos/nuevo', { titulo, insumo: {}, categorias, unidades })
 	} catch (error) {
-		res.render('insumos/nuevo', { titulo, error: error.message })
+		res.render('insumos/nuevo', { titulo, error: error.message, categorias, unidades })
 	}
 }
 
@@ -24,16 +26,16 @@ async function formularioEditarInsumo(req, res) {
 	const titulo = "Editar insumo"
 	try {
 		const insumos = await leerData('insumos')
-		const { estados } = await leerData("config")
+		const { categorias, unidades, estados } = await leerData("config")
         const insumo = insumos.find(i => i.id === req.params.id)
 
 		if (!insumo) {
-			return res.render('insumos/editar', { titulo, error: "ID insumo incorrecto", estados })
+			return res.render('insumos/editar', { titulo, error: "ID insumo incorrecto", categorias, unidades, estados })
 		}
 
-		res.render('insumos/editar', { titulo, insumo, estados })
+		res.render('insumos/editar', { titulo, insumo, categorias, unidades, estados })
 	} catch (error) {
-		res.render('insumos/editar', { titulo, error: error.message, insumo: req.body, estados })
+		res.render('insumos/editar', { titulo, error: error.message, insumo: req.body, categorias, unidades, estados })
 	}
 }
 

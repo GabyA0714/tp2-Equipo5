@@ -12,8 +12,8 @@ function validarInsumo(vista) {
     const { categorias, unidades, estados } = await leerData("config")
     const insumos = await leerData("insumos")
 
-    if (insumos.some(i => i.nombre === nombre && i.categoria === categoria && i.id !== insumo.id)) {
-      error = "Ya existe un insumo con ese nombre en esa categoría"
+    if (insumos.some(i => i.nombre?.trim().toLowerCase() === nombre?.trim().toLowerCase() && i.id !== insumo.id)) {
+      error = `Ya existe un insumo llamado "${nombre}"`;
     }
 
     if (!categorias.includes(categoria)) error = "Categoría inválida"
@@ -26,7 +26,12 @@ function validarInsumo(vista) {
       error = "Estado inválido"
     }
 
-    if (error) return res.render(url, { titulo, error, insumo })
+    
+    if (error) {
+  const insumoConId = { ...req.body, id: req.params.id };
+  const { categorias, unidades, estados } = await leerData("config");
+  return res.render(url, { titulo, error, insumo: insumoConId, categorias, unidades, estados });
+}
     next()
   }
 }

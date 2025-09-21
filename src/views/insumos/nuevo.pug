@@ -18,7 +18,10 @@ block content
     div
       label(for="categoria") Categoría
       br
-      input#categoria(type="text", name="categoria", placeholder="Categoría", value=(insumo && insumo.categoria) ? insumo.categoria : "", required)
+      select(name="categoria", required)
+        each cat in categorias
+          option(value=cat selected=(insumo.categoria === cat))= cat
+      
 
     div
       label(for="stock") Stock
@@ -28,8 +31,11 @@ block content
     div
       label(for="unidad") Unidad
       br
-      input#unidad(type="text", name="unidad", placeholder="Unidad", value=(insumo && insumo.unidad) ? insumo.unidad : "", required)
+      select(name="unidad", required)
+        each u in unidades
+          option(value=u selected=(insumo.unidad === u))= u
 
+      
     div
       label(for="fechaVencimiento") Fecha de vencimiento
       br
