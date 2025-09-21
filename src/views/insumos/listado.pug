@@ -17,7 +17,7 @@ block content
           th Acciones
       tbody
         each insumo in insumos
-          tr(style=insumo.estado === 'vencido' ? 'background-color:#fdd' : '')
+          tr(style=insumo.estado === 'vencido' || insumo.estado === 'agotado' ? 'background-color:#fdd' : '')
             td= insumo.nombre
             td= insumo.categoria
             td= insumo.stock
