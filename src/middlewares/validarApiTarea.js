@@ -19,12 +19,8 @@ async function validarApiTarea(req, res, next) {
             observaciones
         } = req.body;
 
-        const estadosValidos = ["pendiente", "en progreso", "completada"];
-        const prioridadesValidas = ["baja", "media", "alta"];
-        const tiposValidosPorArea = {
-            "Administración de Turnos": ["Alta de turno para paciente", "Reprogramación o cancelación de cita", "Confirmación de asistencia", "Asignación de médico a turno"],
-            "Stock de Insumos": ["Carga de nuevo insumo al stock", "Control de vencimientos", "Reposición de materiales", "Baja por uso o descarte"]
-        };
+        const {estadosValidos, prioridadesValidas, tiposValidosPorArea} = await leerData("config")
+
 
         if (!areas.includes(area)) {
             return res.status(400).json({

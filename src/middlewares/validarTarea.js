@@ -11,23 +11,7 @@ function validarTarea(vista) {
             const areas = await leerData('areas')
             const empleados = await leerData('empleados')
             const pacientes = await leerData('pacientes')
-            const estadosValidos = ["pendiente", "en progreso", "completada"]
-            const prioridadesValidas = ["baja", "media", "alta"]
-            const tiposValidosPorArea = {
-                "Administración de Turnos": [
-                    "Alta de turno para paciente",
-                    "Reprogramación o cancelación de cita",
-                    "Confirmación de asistencia",
-                    "Asignación de médico a turno"
-                ],
-                "Stock de Insumos": [
-                    "Carga de nuevo insumo al stock",
-                    "Control de vencimientos",
-                    "Reposición de materiales",
-                    "Baja por uso o descarte"
-                ]
-            }
-
+            const {estadosValidos, prioridadesValidas, tiposValidosPorArea} = await leerData("config")
             const {
                 area,
                 tipo,
@@ -41,9 +25,6 @@ function validarTarea(vista) {
             } = req.body
             const { id } = req.params
 
-
-
-            // reconstruir el objeto tarea para mantener los datos en el formulario
             let tarea = {
                 id,
                 area,
@@ -95,13 +76,7 @@ function validarTarea(vista) {
             if (pacienteId) {
                 const pacienteExiste = pacientes.find(p => p.id === pacienteId)
                 if (!pacienteExiste) {
-                    return res.render(url, {
-                        error: "El paciente seleccionado no existe",
-                        tarea,
-                        areas,
-                        empleados,
-                        pacientes
-                    })
+                    return renderError("El paciente seleccionado no existe")
                 }
             }
 
@@ -109,54 +84,14 @@ function validarTarea(vista) {
             if (empleadoId) {
                 const empleadoExiste = empleados.find(e => e.id === empleadoId)
                 if (!empleadoExiste) {
-                    return res.render(url, {
-                        error: "El empleado seleccionado no existe",
-                        tarea,
-                        areas,
-                        empleados,
-                        pacientes
-                    })
+                    return renderError("El empleado seleccionado no existe")
                 }
 
-                /*
-                if (empleadoExiste.area !== area) {
-                    return res.render(url, {
-                        error: "El área del empleado no coincide con el área de la tarea",
-                        tarea,
-                        areas,
-                        empleados,
-                        pacientes
-                    })
-                }
-                */
             }
 
-            // Si todo pasa, continúa
             next()
         } catch (error) {
-            res.render(url, {
-                error: "Error interno del servidor",
-                tarea: req.body,
-                areas: await leerData('areas'),
-                empleados: await leerData('empleados'),
-                pacientes: await leerData('pacientes'),
-                estados: ["pendiente", "en progreso", "completada"],
-                prioridades: ["baja", "media", "alta"],
-                tiposValidosPorArea: {
-                    "Administración de Turnos": [
-                        'Alta de turno para paciente',
-                        'Reprogramación o cancelación de cita',
-                        'Confirmación de asistencia',
-                        'Asignación de médico a turno'
-                    ],
-                    "Stock de Insumos": [
-                        'Carga de nuevo insumo al stock',
-                        'Control de vencimientos',
-                        'Reposición de materiales',
-                        'Baja por uso o descarte'
-                    ]
-                }
-            })
+            return renderError("Error interno del servidor")
         }
     }
 }
