@@ -6,11 +6,17 @@ const methodOverride = require('method-override')
 const apiEmpleadoRoutes = require('./routes/apiEmpleadoRoutes')
 const apiPacienteRoutes = require('./routes/apiPacienteRoutes') 
 const apiTareaRoutes = require('./routes/apiTareaRoutes')
+const apiInsumoRoutes = require('./routes/apiInsumoRoutes')
+
+
 
 // Vistas
 const empleadoRoutes = require('./routes/empleadoRoutes')
 const tareaRoutes = require('./routes/tareaRoutes')
-const pacienteRoutes = require('./routes/pacienteRoutes') 
+const pacienteRoutes = require('./routes/pacienteRoutes')
+const insumoRoutes = require('./routes/insumoRoutes')
+
+
 
 const PORT = process.env.PORT || 5000
 const app = express()
@@ -28,12 +34,17 @@ app.set('view engine', 'pug')
 app.use('/api/empleados', apiEmpleadoRoutes)
 app.use('/api/pacientes', apiPacienteRoutes) 
 app.use('/api/tareas', apiTareaRoutes)
+app.use('/api/insumos', apiInsumoRoutes)
+
+
 
 // Rutas Vistas
 app.get('/', (req, res) => res.render('portada')) 
 app.use('/empleados', empleadoRoutes)
 app.use('/tareas', tareaRoutes)
-app.use('/pacientes', pacienteRoutes) 
+app.use('/pacientes', pacienteRoutes)
+app.use('/insumos', insumoRoutes)
+
 
 // Servidor
 app.listen(PORT, () => {
