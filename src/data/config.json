@@ -1,5 +1,21 @@
 {
   "categorias": ["medicamento", "descartable", "instrumental"],
   "unidades": ["unidad", "caja", "frasco"],
-  "estados": ["vigente", "vencido", "agotado"]
+  "estados": ["vigente", "vencido", "agotado"],
+  "estadosValidos": ["pendiente", "en progreso", "finalizada"],
+  "prioridadesValidas": ["baja", "media", "alta"],
+  "tiposValidosPorArea": {
+    "Administración de Turnos": [
+      "Alta de turno para paciente",
+      "Reprogramación o cancelación de cita",
+      "Confirmación de asistencia",
+      "Asignación de médico a turno"
+    ],
+    "Stock de Insumos": [
+      "Carga de nuevo insumo al stock",
+      "Control de vencimientos",
+      "Reposición de materiales",
+      "Baja por uso o descarte"
+    ]
+  }
 }

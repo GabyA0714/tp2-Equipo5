@@ -25,5 +25,14 @@
         "unidad": "frasco",
         "fechaVencimiento": "2025-10-09",
         "estado": "vigente"
+    },
+    {
+        "id": "1758450599443",
+        "nombre": "guantes",
+        "categoria": "descartable",
+        "stock": "4",
+        "unidad": "caja",
+        "fechaVencimiento": "2025-10-21",
+        "estado": "vigente"
     }
 ]

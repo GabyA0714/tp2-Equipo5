@@ -68,7 +68,13 @@ block content
           option(value="" selected) Ninguno
           each p in pacientes
             option(value=p.id selected=(tarea && tarea.pacienteId == p.id) ? true : false)= "Id: " + p.id + " - " + p.nombre + " " + p.apellido
-      
+
+      div
+        label(for="proveedor") Proveedor (opcional)
+        br
+        textarea#proveedor(name="proveedor", placeholder="Proveedor")= (tarea && tarea.proveedor) ? tarea.proveedor : ""
+
+
       div
         label(for="observaciones") Observaciones (opcional)
         br

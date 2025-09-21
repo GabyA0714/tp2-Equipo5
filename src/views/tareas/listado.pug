@@ -63,7 +63,7 @@ block content
     ul
       each t in tareas
         li
-          | Área: #{t.area}, Tipo: #{t.tipo}, Estado: #{t.estado}, Prioridad: #{t.prioridad}, Fecha Inicio: #{t.fechaInicio}, Fecha Fin: #{t.fechaFin || 'N/A'}, Descripción: #{t.descripcion || 'N/A'}, Empleado ID: #{t.empleadoId || 'N/A'}, Paciente ID: #{t.pacienteId || 'N/A'}, Proveedor: #{t.proveedor || 'N/A'}, Observaciones: #{t.observaciones || 'N/A'} -
+          | Área: #{t.area}, Tipo: #{t.tipo}, Estado: #{t.estado}, Prioridad: #{t.prioridad}, Fecha Inicio: #{t.fechaInicio}, Fecha Fin: #{t.fechaFin || 'N/A'}, Empleado ID: #{t.empleadoId || 'N/A'}, Paciente ID: #{t.pacienteId || 'N/A'}, Proveedor: #{t.proveedor || 'N/A'}, Observaciones: #{t.observaciones || 'N/A'} -
         button(type="button", onclick=`location.href='/tareas/editar/${t.id}'`) Editar
         form(action=`/tareas/eliminar/${t.id}?_method=DELETE`, method="post", style="display:inline")
           button(type="submit") Eliminar
