@@ -21,7 +21,6 @@
 | María Belén Cantarini Echezarreta | Módulo Tareas y Filtros – Backend API |
 | Damián Marcelo Gómez De Leo | Módulo Tareas y Filtros – Vistas Pug |
 | Emiliano Núñez | Módulo Insumos – API + Vistas Pug |
-| Vacante (Facundo Azcue) | Módulo Empleados – API + Vistas Pug |
 
 ---
 
