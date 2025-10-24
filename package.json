@@ -1,14 +1,14 @@
 {
-  "name": "tp1-grupal",
+  "name": "tp2-equipo5",
   "version": "1.0.0",
-  "description": "",
+  "description": "Proyecto Backend - TP2 Equipo 5",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/index.js"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Equipo 5",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
