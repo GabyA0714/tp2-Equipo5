@@ -52,5 +52,23 @@
         "unidad": "caja",
         "fechaVencimiento": "2025-10-21",
         "estado": "vigente"
+    },
+    {
+        "id": "1761406051828",
+        "nombre": "aguja",
+        "categoria": "descartable",
+        "stock": 0,
+        "unidad": "frasco",
+        "fechaVencimiento": "2025-10-28",
+        "estado": "agotado"
+    },
+    {
+        "id": "1761406382791",
+        "nombre": "pastillas",
+        "categoria": "descartable",
+        "stock": 0,
+        "unidad": "frasco",
+        "fechaVencimiento": "2025-10-28",
+        "estado": "agotado"
     }
 ]

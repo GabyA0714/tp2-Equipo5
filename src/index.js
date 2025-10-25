@@ -11,6 +11,7 @@ const apiTareaRoutes = require('./routes/apiTareaRoutes');
 const apiInsumoRoutes = require('./routes/apiInsumoRoutes');
 const apiPacienteMongoRoutes = require('./routes/apiPacienteMongoRoutes');
 const apiEmpleadoMongoRoutes = require('./routes/apiEmpleadoMongoRoutes');
+const apiInsumoMongoRoutes = require('./routes/apiInsumoMongoRoutes');
 
 // Rutas Vistas (Pug)
 const empleadoRoutes = require('./routes/empleadoRoutes');
@@ -38,6 +39,7 @@ app.use('/api/tareas', apiTareaRoutes);
 app.use('/api/insumos', apiInsumoRoutes);
 app.use('/api/pacientesmongo', apiPacienteMongoRoutes);
 app.use('/api/empleadosmongo', apiEmpleadoMongoRoutes);
+app.use('/api/insumosmongo', apiInsumoMongoRoutes);
 
 // Rutas vistas
 app.get('/', (req, res) => res.render('portada'));
