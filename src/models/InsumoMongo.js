@@ -10,4 +10,4 @@ const insumoSchema = new mongoose.Schema({
   activo: { type: Boolean, default: true }
 }, { timestamps: true });
 
-module.exports = mongoose.model('InsumoMongo', insumoSchema);
+module.exports = mongoose.model('InsumoMongo', insumoSchema, 'Insumos');
