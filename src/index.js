@@ -12,6 +12,7 @@ const apiInsumoRoutes = require('./routes/apiInsumoRoutes');
 const apiPacienteMongoRoutes = require('./routes/apiPacienteMongoRoutes');
 const apiEmpleadoMongoRoutes = require('./routes/apiEmpleadoMongoRoutes');
 const apiInsumoMongoRoutes = require('./routes/apiInsumoMongoRoutes');
+const apiTareaMongoRoutes = require('./routes/apiTareaMongoRoutes');
 
 // Rutas Vistas (Pug)
 const empleadoRoutes = require('./routes/empleadoRoutes');
