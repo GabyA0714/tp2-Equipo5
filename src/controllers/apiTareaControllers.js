@@ -1,17 +1,6 @@
 const Tarea = require('../models/Tarea')
 const { leerData, escribirData } = require('../lib/fs')
 
-async function crearTarea(req, res) {
-    try {
-        const nuevaTarea = new Tarea(req.body)
-        const tareas = await leerData("tareas")
-        tareas.push(nuevaTarea)
-        await escribirData("tareas", tareas)
-        return res.status(201).json(nuevaTarea)
-    } catch (error) {
-        res.status(500).json({ error: error.message })
-    }
-}
 
 async function obtenerTareas(req, res) {
     try {
@@ -47,6 +36,18 @@ async function obtenerTareaPorId(req, res) {
         return res.status(200).json(tarea)
     } catch (error) {
         return res.status(500).json({ error: error.message })
+    }
+}
+
+async function crearTarea(req, res) {
+    try {
+        const nuevaTarea = new Tarea(req.body)
+        const tareas = await leerData("tareas")
+        tareas.push(nuevaTarea)
+        await escribirData("tareas", tareas)
+        return res.status(201).json(nuevaTarea)
+    } catch (error) {
+        res.status(500).json({ error: error.message })
     }
 }
 
