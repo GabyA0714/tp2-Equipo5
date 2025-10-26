@@ -41,6 +41,7 @@ app.use('/api/insumos', apiInsumoRoutes);
 app.use('/api/pacientesmongo', apiPacienteMongoRoutes);
 app.use('/api/empleadosmongo', apiEmpleadoMongoRoutes);
 app.use('/api/insumosmongo', apiInsumoMongoRoutes);
+app.use('/api/tareasmongo', apiTareaMongoRoutes);
 
 // Rutas vistas
 app.get('/', (req, res) => res.render('portada'));
