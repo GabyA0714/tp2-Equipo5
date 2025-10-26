@@ -14,15 +14,19 @@ const apiEmpleadoMongoRoutes = require('./routes/apiEmpleadoMongoRoutes');
 const apiInsumoMongoRoutes = require('./routes/apiInsumoMongoRoutes');
 const apiTareaMongoRoutes = require('./routes/apiTareaMongoRoutes');
 
-// Rutas Vistas (Pug)
+// Rutas Vistas (Pug y MongoDB)
 const empleadoRoutes = require('./routes/empleadoRoutes');
 const tareaRoutes = require('./routes/tareaRoutes');
 const pacienteRoutes = require('./routes/pacienteRoutes');
 const insumoRoutes = require('./routes/insumoRoutes');
+const tareaMongoRoutes = require('./routes/tareaMongoRoutes');
 
 // Configuración general
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Middlewares
 app.use(express.json());
@@ -49,6 +53,7 @@ app.use('/empleados', empleadoRoutes);
 app.use('/tareas', tareaRoutes);
 app.use('/pacientes', pacienteRoutes);
 app.use('/insumos', insumoRoutes);
+app.use('/tareasmongo', tareaMongoRoutes);
 
 // Conexión a MongoDB Atlas
 mongoose.connect(process.env.MONGO_URI)
