@@ -53,3 +53,5 @@ exports.eliminarTarea = async (req, res) => {
         res.status(500).json({ mensaje: 'Error al eliminar tarea', error: error.message });
     }
 };
+
+
