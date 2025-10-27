@@ -1,88 +1,136 @@
-require('dotenv').config();
 const mongoose = require('mongoose');
+require('dotenv').config();
 
-// Importa todos tus modelos
-const Empleado = require('./models/EmpleadoMongo');
-const Paciente = require('./models/PacienteMongo');
+// --- IMPORTACIÓN DE MODELOS (Ajusta la ruta si es necesario) ---
+const Tarea = require('./src/models/TareaMongo'); 
+const Insumo = require('./src/models/InsumoMongo');
+const Empleado = require('./src/models/EmpleadoMongo');
+const Paciente = require('./src/models/pacienteMongoModel');
 
-// --- 1. DATOS DE CONFIGURACIÓN (CONSTANTES DE LA APLICACIÓN) ---
-const configData = {
-    // Configuraciones para Tareas
-    areas: [
-        "Administración de Turnos", 
-        "Atención Médica", 
-        "Stock de Insumos", 
-        "Facturación"
-    ],
-    estadosValidos: ["pendiente", "en progreso", "completada", "cancelada"],
-    prioridadesValidas: ["Alta", "Media", "Baja"],
-    tiposValidosPorArea: {
-        "Administración de Turnos": [
-            "Alta de turno para paciente",
-            "Reprogramación o cancelación de cita",
-            "Confirmación de asistencia"
-        ],
-        "Stock de Insumos": [
-            "Carga de nuevo insumo al stock",
-            "Control de vencimientos",
-            "Reposición de materiales"
-        ]
-    },
+// --- 1. DATOS DE PRUEBA SIMPLIFICADOS (3 EJEMPLOS POR COLECCIÓN) ---
 
-    // Configuraciones para Empleados
-    roles: ["administrador", "médico", "recepcionista", "encargado de stock"],
-
-    // Configuraciones de Insumos (Nuevos campos)
-    categorias: ["medicamento", "descartable", "instrumental"],
-    unidades: ["unidad", "caja", "frasco", "litro"],
-    estadosDelInsumo: ["vigente", "vencido", "agotado"]
-};
-
-// --- 2. DATOS DE PRUEBA (Para Empleados y Pacientes) ---
-const pacientesDePrueba = [{ 
-    nombre: "Laura", apellido: "Martínez", dni: "38112233", activo: true,
-    email: "laura.m@test.com", telefono: "1155006600"
-}];
-
-const empleadosDePrueba = [{ 
-    nombre: "Ricardo", apellido: "Silva", dni: "25998877", rol: "administrador", 
+// Empleados (Total 3)
+const empleadosData = [{ 
+    nombre: "Ricardo", apellido: "Silva", dni: "25998877", rol: "Administrativo", 
     area: "Administración de Turnos", email: "ricardo.s@test.com", activo: true
 },{ 
-    nombre: "Carla", apellido: "Rojas", dni: "30445566", rol: "médico", 
+    nombre: "Carla", apellido: "Rojas", dni: "30445566", rol: "Médico", 
     area: "Atención Médica", email: "carla.r@test.com", activo: true
+},{
+    nombre: "Ana", apellido: "Gómez", dni: "35667788", rol: "Encargado de Stock", 
+    area: "Stock de Insumos", email: "a.gomez@test.com", activo: true
+}];
+
+// Pacientes (Total 3)
+const pacientesData = [{ 
+    nombre: "Laura", apellido: "Martínez", dni: "38112233", activo: true,
+    email: "laura.m@test.com", telefono: "1155006600", obraSocial: "OSDE",
+    fechaNacimiento: new Date('1985-06-15'), direccion: "Av. Corrientes 1234"
+}, {
+    nombre: "Carlos", apellido: "Rodríguez", dni: "28776655", activo: true, 
+    email: "c.rodriguez@test.com", telefono: "1144332211", obraSocial: "PAMI", 
+    fechaNacimiento: new Date('1950-01-20'), direccion: "Calle Falsa 123"
+}, {
+    nombre: "Elena", apellido: "Sánchez", dni: "42109876", activo: false, 
+    email: "e.sanchez@test.com", telefono: "1122334455", obraSocial: "Swiss Medical", 
+    fechaNacimiento: new Date('2001-11-05'), direccion: "Libertador 500"
 }];
 
 
-// --- 3. FUNCIÓN PRINCIPAL DE SEEDING ---
-async function seedDatabase() {
-    console.log("Iniciando Seeding y conexión a MongoDB...");
+// Insumos (Total 3)
+const insumosData = [{
+    nombre: "Paracetamol 500mg", categoria: "medicamento", stock: 150, unidad: "Cajas", 
+    fechaVencimiento: new Date('2026-10-01'), estado: "vigente", activo: true
+}, {
+    nombre: "Jeringas 5ml", categoria: "descartable", stock: 500, unidad: "Unidades", 
+    fechaVencimiento: new Date('2025-05-20'), estado: "vigente", activo: true
+}, {
+    nombre: "Tramadol", categoria: "medicamento", stock: 5, unidad: "Cajas", 
+    fechaVencimiento: new Date('2024-01-20'), estado: "vencido", activo: true
+}];
 
+// Tareas (Total 3 - usando placeholders _EMP_ e _PAC_)
+const tareasFijas = [{
+    area: "Administración de Turnos", tipo: "Alta de turno", estado: "Completada", 
+    prioridad: "Alta", fechaInicio: new Date('2024-05-01'), fechaFin: new Date('2024-05-01'), 
+    empleadoId: null, pacienteId: null, observaciones: "Turno asignado con Médico Carla Rojas."
+}, {
+    area: "Atención Médica", tipo: "Consulta inicial", estado: "En Progreso", 
+    prioridad: "Media", fechaInicio: new Date('2024-05-20'), fechaFin: null, 
+    empleadoId: null, pacienteId: null, observaciones: "Paciente con tos persistente."
+}, {
+    area: "Stock de Insumos", tipo: "Carga de nuevo insumo", estado: "Pendiente", 
+    prioridad: "Alta", fechaInicio: new Date('2024-05-25'), fechaFin: null, 
+    empleadoId: null, pacienteId: null, proveedor: "Farmacias del Sur", 
+    observaciones: "Esperando llegada de Paracetamol."
+}];
+
+// ----------------------------------------------------
+// 2. FUNCIÓN PRINCIPAL DE SIEMBRA
+// ----------------------------------------------------
+
+const seedDB = async () => {
     try {
+        // Conexión
         await mongoose.connect(process.env.MONGO_URI);
-        console.log('✅ Conectado correctamente a MongoDB Atlas.');
+        console.log('✅ Conexión a MongoDB exitosa.');
 
-        // 1. LIMPIEZA DE DATOS PREVIOS (Para un entorno de desarrollo limpio)
-        await Config.deleteMany({});
-        await Paciente.deleteMany({});
+        // 2.1. Limpieza
+        console.log('--- Limpiando colecciones existentes...');
         await Empleado.deleteMany({});
-        console.log("Datos antiguos de Configuración, Pacientes y Empleados eliminados.");
+        await Insumo.deleteMany({});
+        await Paciente.deleteMany({});
+        await Tarea.deleteMany({});
+        console.log("Limpieza completada.");
 
-        // 2. INSERCIÓN DE CONFIGURACIÓN
-        await Config.create(configData);
-        console.log("✅ Documento de Configuración inicial cargado.");
+        // 2.2. INSERCIÓN DE EMPLEADOS, PACIENTES E INSUMOS
+        console.log('--- Insertando datos base...');
+        
+        const empleadosInsertados = await Empleado.insertMany(empleadosData);
+        const pacientesInsertados = await Paciente.insertMany(pacientesData);
+        const insumos = await Insumo.insertMany(insumosData);
 
-        // 3. INSERCIÓN DE DATOS DE PRUEBA
-        await Paciente.insertMany(pacientesDePrueba);
-        await Empleado.insertMany(empleadosDePrueba);
-        console.log(`✅ ${pacientesDePrueba.length} Paciente(s) y ${empleadosDePrueba.length} Empleado(s) de prueba cargados.`);
+        console.log(`✅ ${empleadosInsertados.length} Empleados, ${pacientesInsertados.length} Pacientes y ${insumos.length} Insumos cargados.`);
+        
+        // 2.3. GENERACIÓN Y REEMPLAZO DE IDS EN TAREAS
+        const empleadoIds = empleadosInsertados.map(emp => emp._id);
+        const pacienteIds = pacientesInsertados.map(pac => pac._id);
+        
+        console.log('--- Generando Tareas y mapeando IDs...');
+
+        const tareasFinales = tareasFijas.map(tarea => {
+            const nuevaTarea = { ...tarea }; 
+            
+            // Reemplazo para Empleado
+            if (nuevaTarea.empleadoId && nuevaTarea.empleadoId.startsWith('_EMP_')) {
+                const index = parseInt(nuevaTarea.empleadoId.substring(5)); 
+                nuevaTarea.empleadoId = empleadoIds[index];
+            }
+
+            // Reemplazo para Paciente
+            if (nuevaTarea.pacienteId && nuevaTarea.pacienteId.startsWith('_PAC_')) {
+                const index = parseInt(nuevaTarea.pacienteId.substring(5)); 
+                nuevaTarea.pacienteId = pacienteIds[index];
+            }
+            return nuevaTarea;
+        });
+
+        // 2.4. INSERCIÓN DE TAREAS
+        const tareas = await Tarea.insertMany(tareasFinales);
+        console.log(`✅ ${tareas.length} Tareas cargadas con referencias válidas.`);
+
+        console.log('\n✨✨ DATOS DE SIEMBRA COMPLETADOS CON ÉXITO. ✨✨');
 
     } catch (error) {
-        console.error('❌ ERROR FATAL durante el Seeding:', error.message);
+        console.error('\n❌ ERROR FATAL durante el Seeding:', error.message);
     } finally {
-        // 4. CERRAR LA CONEXIÓN
+        // 2.5. CERRAR LA CONEXIÓN
         await mongoose.connection.close();
-        console.log("Conexión a MongoDB cerrada.");
+        console.log('Conexión a MongoDB cerrada.');
     }
-}
+};
 
-seedDatabase();
+// ----------------------------------------------------
+// 3. INICIO DE EJECUCIÓN
+// ----------------------------------------------------
+seedDB();
